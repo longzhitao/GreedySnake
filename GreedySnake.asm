@@ -1,5 +1,4 @@
-;¸ĞĞ»´ó´ÀÂ¿¸øÓëµÄ¶¯Á¦
-;¸ĞĞ»ÍõË¬ÀÏÊ¦µÄ½Ì³Ì
+;æ„Ÿè°¢ç‹çˆ½è€å¸ˆçš„æ•™ç¨‹
 assume cs: code, ds: data, ss: stack
 
 data segment
@@ -11,7 +10,7 @@ SNAKE_HEAD			dw		0						;
 		
 SNAKE_STERN			dw		12						;
 
-SNAKE				dw		200 dup (0,0,0)			;(Ç°Ò»¿ÌµÄÎ»ÖÃ£¬´ËÊ±µÄÎ»ÖÃ£¬ÏÂÒ»¿ÌµÄÎ»ÖÃ)
+SNAKE				dw		200 dup (0,0,0)			;(å‰ä¸€åˆ»çš„ä½ç½®ï¼Œæ­¤æ—¶çš„ä½ç½®ï¼Œä¸‹ä¸€åˆ»çš„ä½ç½®)
 
 SNAKE_COLOR			dw		2241h
 
@@ -143,7 +142,7 @@ init_snake:		mov bx,offset SNAKE
 				
 
 				ret
-;Ë«ÏòÁ´±í
+;åŒå‘é“¾è¡¨
 ;-----------------------------------------------				
 init_screen:	mov dx,BOUNDARY_COLOR
 				call show_up_down_line
@@ -196,7 +195,7 @@ new_int9:		push ax
 
 				call clear_buff
 
-				in al,60h			;ÊäÈë
+				in al,60h			;è¾“å…¥
 				pushf
 				call dword ptr cs:[200h]
 				
@@ -253,7 +252,7 @@ isRight:		mov di,160*24 + 40*2
 isMoveUp:		mov bx,offset SNAKE
 				add bx,SNAKE_HEAD
 				mov si,ds:[bx+2]
-				sub si,NEXT_ROW		;ÏòÉÏ¼õÉÙÒ»ĞĞ
+				sub si,NEXT_ROW		;å‘ä¸Šå‡å°‘ä¸€è¡Œ
 				
 				cmp byte ptr es:[si],0
 				jne noMoveUp
@@ -271,7 +270,7 @@ isMoveDown:
 				mov si,ds:[bx+2]
 				add si,NEXT_ROW
 				
-				cmp byte ptr es:[si],0			;ÅĞ¶ÏÊÇ·ñÓĞÕÏ°­Îï£¬ÎŞÕÏ°­ÎïµÄÊ±ºòASCIIÎª0
+				cmp byte ptr es:[si],0			;åˆ¤æ–­æ˜¯å¦æœ‰éšœç¢ç‰©ï¼Œæ— éšœç¢ç‰©çš„æ—¶å€™ASCIIä¸º0
 				jne noMoveDown
 				call draw_new_snake
 				mov DIRECTION,1
@@ -313,7 +312,7 @@ noMoveRight:	call isFood
 
 rightContinue:	ret
 ;-----------------------------------------------				
-isFood:			cmp byte ptr es:[si],'9'		;foodÎª9 ÅĞ¶ÏÊÇ·ñÊÇÊ³Îï
+isFood:			cmp byte ptr es:[si],'9'		;foodä¸º9 åˆ¤æ–­æ˜¯å¦æ˜¯é£Ÿç‰©
 				
 				jne draw_game_over
 				
@@ -393,9 +392,9 @@ set_new_food:	mov al,0
 				
 				mov bl,10
 				mul bl
-				add al,dl				;ÃëÊı
+				add al,dl				;ç§’æ•°
 				
-				mul al					;·ÀÖ¹ÆæÊı
+				mul al					;é˜²æ­¢å¥‡æ•°
 				shr al,1
 				shl al,1
 				
@@ -409,8 +408,8 @@ set_new_food:	mov al,0
 				ret
 ;-----------------------------------------------				
 draw_new_snake:
-				push SNAKE_STERN		;°ÑÎ²²¿Ñ¹ÈëÕ»
-				pop ds:[bx+0]			;µ±Ç°µÄÉíÌå±äÎªÎ²²¿
+				push SNAKE_STERN		;æŠŠå°¾éƒ¨å‹å…¥æ ˆ
+				pop ds:[bx+0]			;å½“å‰çš„èº«ä½“å˜ä¸ºå°¾éƒ¨
 				
 				mov bx,offset SNAKE		;
 				add bx,SNAKE_STERN
@@ -488,11 +487,11 @@ set_new_int9:
 				ret
 ;-----------------------------------------------
 sav_old_int9:
-;±£»¤Ô­À´µÄint9ÖĞ¶Ï ·Åµ½0000:0200ºó
+;ä¿æŠ¤åŸæ¥çš„int9ä¸­æ–­ æ”¾åˆ°0000:0200å
 				mov bx,0
 				mov es,bx
 				
-				cli					;·ÀÖ¹ÍâÖĞ¶Ï
+				cli					;é˜²æ­¢å¤–ä¸­æ–­
 				push es:[9*4]
 				pop es:[200h]
 				push es:[9*4 + 2]
